@@ -1,13 +1,13 @@
 @extends('layouts.app')
 @section('title')
-Blog - home
+{{$post->title}}
 @endsection
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-lg-12">
-            <h3>Blog posts</h3>
-            <app-post-cards-list />
+        <div class="col-lg-10 offset-lg-1">
+            <app-post-show :post="{{$post}}" />
         </div>
     </div>
-</div> @endsection
+</div>
+@endsection

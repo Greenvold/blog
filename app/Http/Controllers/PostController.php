@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Post;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth')->only('create');
+        $this->middleware(['auth', 'author'])->except(['index', 'show', 'create']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +20,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        return Post::paginate(8);
     }
 
     /**
@@ -23,7 +30,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -34,7 +41,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $post = Post::create([
+            'title' => $request->title,
+            'desc' => $request->desc,
+            'body' => $request->body,
+            'user_id' => auth()->user()->id,
+        ]);
+
+        return $post;
     }
 
     /**
@@ -43,9 +57,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        //
+        return view('posts.show')->withPost($post);
     }
 
     /**
@@ -54,9 +68,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('posts.edit')->withPost($post);
     }
 
     /**
@@ -66,9 +80,11 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $post = $post->update($request->all());
+
+        return $post;
     }
 
     /**
@@ -77,8 +93,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return redirect()->back();
     }
 }
