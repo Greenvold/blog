@@ -4,7 +4,7 @@
         <div class="card-body">
             <div class="form-group">
                 <label for="title">Title</label>
-                <input type="text" class="form-control" v-model="title" />
+                <input type="text" class="form-control" v-model="post.title" />
                 <small id="titleHelp" class="form-text text-muted"
                     >Title of the post that will be shown on homepage.</small
                 >
@@ -17,7 +17,7 @@
                     cols="30"
                     rows="3"
                     class="form-control"
-                    v-model="desc"
+                    v-model="post.desc"
                 ></textarea>
                 <small id="titleHelp" class="form-text text-muted"
                     >Short description will be show on the blog post home
@@ -32,7 +32,7 @@
                     cols="30"
                     rows="10"
                     class="form-control"
-                    v-model="body"
+                    v-model="post.body"
                 ></textarea>
                 <small id="titleHelp" class="form-text text-muted"
                     >Main content of your new post. This content will be shown
@@ -57,17 +57,24 @@
 </template>
 <script>
 export default {
+    props: {
+        _post: {
+            type: Object,
+            default: () => {
+                return { post: "", edit: "", loading: "" };
+            }
+        }
+    },
     data() {
         return {
-            title: "",
-            desc: "",
-            body: "",
+            post: this._post,
+            edit: false,
             loading: false
         };
     },
     methods: {
         submit() {
-            if (!this.title || !this.desc || !this.body) {
+            if (!this.post.title || !this.post.desc || !this.post.body) {
                 this.$noty.warning(
                     "Please fill in all fields before submitting. Thank you."
                 );
@@ -75,10 +82,12 @@ export default {
             }
             this.loading = true;
             const formData = new FormData();
-            formData.append("title", this.title);
-            formData.append("desc", this.desc);
-            formData.append("body", this.body);
-
+            formData.append("title", this.post.title);
+            formData.append("desc", this.post.desc);
+            formData.append("body", this.post.body);
+            if (this.edit) {
+                formData.append("_method", "PUT");
+            }
             axios
                 .post("/post", formData)
                 .then(res => {

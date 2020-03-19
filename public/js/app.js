@@ -1999,11 +1999,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    _post: {
+      type: Object,
+      "default": function _default() {
+        return {
+          post: "",
+          edit: "",
+          loading: ""
+        };
+      }
+    }
+  },
   data: function data() {
     return {
-      title: "",
-      desc: "",
-      body: "",
+      post: this._post,
+      edit: false,
       loading: false
     };
   },
@@ -2011,16 +2022,21 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {
       var _this = this;
 
-      if (!this.title || !this.desc || !this.body) {
+      if (!this.post.title || !this.post.desc || !this.post.body) {
         this.$noty.warning("Please fill in all fields before submitting. Thank you.");
         return;
       }
 
       this.loading = true;
       var formData = new FormData();
-      formData.append("title", this.title);
-      formData.append("desc", this.desc);
-      formData.append("body", this.body);
+      formData.append("title", this.post.title);
+      formData.append("desc", this.post.desc);
+      formData.append("body", this.post.body);
+
+      if (this.edit) {
+        formData.append("_method", "PUT");
+      }
+
       axios.post("/post", formData).then(function (res) {
         window.location.href = "/post/" + res.data.id;
       })["catch"](function (e) {
@@ -38792,19 +38808,19 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.title,
-              expression: "title"
+              value: _vm.post.title,
+              expression: "post.title"
             }
           ],
           staticClass: "form-control",
           attrs: { type: "text" },
-          domProps: { value: _vm.title },
+          domProps: { value: _vm.post.title },
           on: {
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.title = $event.target.value
+              _vm.$set(_vm.post, "title", $event.target.value)
             }
           }
         }),
@@ -38824,19 +38840,19 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.desc,
-              expression: "desc"
+              value: _vm.post.desc,
+              expression: "post.desc"
             }
           ],
           staticClass: "form-control",
           attrs: { name: "desc", id: "desc", cols: "30", rows: "3" },
-          domProps: { value: _vm.desc },
+          domProps: { value: _vm.post.desc },
           on: {
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.desc = $event.target.value
+              _vm.$set(_vm.post, "desc", $event.target.value)
             }
           }
         }),
@@ -38860,19 +38876,19 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.body,
-              expression: "body"
+              value: _vm.post.body,
+              expression: "post.body"
             }
           ],
           staticClass: "form-control",
           attrs: { name: "body", id: "body", cols: "30", rows: "10" },
-          domProps: { value: _vm.body },
+          domProps: { value: _vm.post.body },
           on: {
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.body = $event.target.value
+              _vm.$set(_vm.post, "body", $event.target.value)
             }
           }
         }),
