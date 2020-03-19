@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth')->only('create');
+        $this->middleware(['auth', 'author'])->except(['index', 'show', 'create']);
+    }
     /**
      * Display a listing of the resource.
      *
