@@ -40,7 +40,17 @@
                 >
             </div>
             <div class="form-group">
-                <button class="btn btn-primary" @click="submit">Submit</button>
+                <button class="btn btn-primary" @click="submit" v-if="!loading">
+                    Submit
+                </button>
+                <button class="btn btn-primary" type="button" disabled v-else>
+                    <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                    ></span>
+                    Loading...
+                </button>
             </div>
         </div>
     </div>
@@ -51,7 +61,8 @@ export default {
         return {
             title: "",
             desc: "",
-            body: ""
+            body: "",
+            loading: false
         };
     },
     methods: {
@@ -62,14 +73,23 @@ export default {
                 );
                 return;
             }
+            this.loading = true;
             const formData = new FormData();
             formData.append("title", this.title);
             formData.append("desc", this.desc);
             formData.append("body", this.body);
 
-            axios.post("/post", formData).then(() => {
-                this.$noty.success("You have successfully submitted new post.");
-            });
+            axios
+                .post("/post", formData)
+                .then(res => {
+                    window.location.href = "/post/" + res.data.id;
+                })
+                .catch(e => {
+                    this.$noty.error("Oooops something went wrong.");
+                })
+                .finally(() => {
+                    this.loading = true;
+                });
         }
     }
 };

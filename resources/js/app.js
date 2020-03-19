@@ -27,6 +27,11 @@ Vue.component(
     "app-post-create",
     require("./components/posts/create.vue").default
 );
+Vue.component("app-post-show", require("./components/posts/show.vue").default);
+Vue.component(
+    "app-post-cards-list",
+    require("./components/posts/post_cards_list.vue").default
+);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -37,6 +42,8 @@ import VueNoty from "vuejs-noty";
 import "vuejs-noty/dist/vuejs-noty.css";
 
 Vue.use(VueNoty);
+
+Vue.component("pagination", require("laravel-vue-pagination"));
 
 const app = new Vue({
     el: "#app"

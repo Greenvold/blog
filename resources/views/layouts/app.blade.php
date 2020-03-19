@@ -39,9 +39,11 @@
                     <ul class="navbar-nav mr-auto">
 
                     </ul>
-
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="{{route('blog.index')}}" class="nav-link">Posts</a>
+                        </li>
                         <!-- Authentication Links -->
                         @guest
                         <li class="nav-item">
