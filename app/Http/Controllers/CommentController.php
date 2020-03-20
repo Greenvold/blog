@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Comment;
 use App\Post;
 use Illuminate\Http\Request;
 
@@ -17,34 +18,18 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $comment = Comment::create([
+            'email' => $request->email,
+            'name' => $request->name,
+            'body' => $request->body,
+            'post_id' => $request->post_id
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return $comment;
     }
 
     public function fetch(Post $post)
     {
-        return $post->comments()->paginate(6);
+        return $post->comments()->orderBy('created_at', 'desc')->paginate(6);
     }
 }

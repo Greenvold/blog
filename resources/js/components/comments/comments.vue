@@ -3,6 +3,30 @@
         <div class="card mt-2 px-5 py-2">
             <div class="my-2 w-full">
                 <label for="comment">New Comment</label>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="name">Name</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="name"
+                                id="name"
+                                v-model="name"
+                            />
+                        </div>
+                        <div class="col-6">
+                            <label for="email">Email</label>
+                            <input
+                                type="email"
+                                class="form-control"
+                                name="email"
+                                id="email"
+                                v-model="email"
+                            />
+                        </div>
+                    </div>
+                </div>
                 <textarea
                     name="comment"
                     id="comment"
@@ -55,7 +79,10 @@ export default {
             data: []
         },
         newComment: "",
-        loading: false
+        loading: false,
+        email: "",
+        name: "",
+        reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
     }),
     methods: {
         fetchComments() {
@@ -73,17 +100,28 @@ export default {
             });
         },
         addComment() {
-            if (!this.newComment) return;
-
-            Axios.post(`/comments/${this.entity_id}`, {
-                body: this.newComment
-            }).then(({ data }) => {
+            if (!this.newComment || !this.name || !this.email) {
+                this.$noty.warning("Please fill in all the fields.");
+                return;
+            }
+            if (!this.reg.test(this.email)) {
+                this.$noty.warning("Please enter proper email address!");
+                return;
+            }
+            const formData = new FormData();
+            formData.append("name", this.name);
+            formData.append("email", this.email);
+            formData.append("body", this.newComment);
+            formData.append("post_id", this.entity_id);
+            Axios.post(`/comment`, formData).then(({ data }) => {
                 this.comments = {
                     ...this.comments,
                     data: [data, ...this.comments.data]
                 };
                 this.newComment = "";
-                this.$noty.success(this.$t("noty_comments_success"));
+                this.name = "";
+                this.email = "";
+                this.$noty.success("Comment created successfully!");
             });
         }
     }

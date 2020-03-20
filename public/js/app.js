@@ -2038,6 +2038,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2054,7 +2078,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         data: []
       },
       newComment: "",
-      loading: false
+      loading: false,
+      email: "",
+      name: "",
+      reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
     };
   },
   methods: {
@@ -2074,17 +2101,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     addComment: function addComment() {
       var _this2 = this;
 
-      if (!this.newComment) return;
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/comments/".concat(this.entity_id), {
-        body: this.newComment
-      }).then(function (_ref2) {
+      if (!this.newComment || !this.name || !this.email) {
+        this.$noty.warning("Please fill in all the fields.");
+        return;
+      }
+
+      if (!this.reg.test(this.email)) {
+        this.$noty.warning("Please enter proper email address!");
+        return;
+      }
+
+      var formData = new FormData();
+      formData.append("name", this.name);
+      formData.append("email", this.email);
+      formData.append("body", this.newComment);
+      formData.append("post_id", this.entity_id);
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/comment", formData).then(function (_ref2) {
         var data = _ref2.data;
         _this2.comments = _objectSpread({}, _this2.comments, {
           data: [data].concat(_toConsumableArray(_this2.comments.data))
         });
         _this2.newComment = "";
+        _this2.name = "";
+        _this2.email = "";
 
-        _this2.$noty.success(_this2.$t("noty_comments_success"));
+        _this2.$noty.success("Comment created successfully!");
       });
     }
   }
@@ -39043,6 +39084,62 @@ var render = function() {
             _c("div", { staticClass: "my-2 w-full" }, [
               _c("label", { attrs: { for: "comment" } }, [
                 _vm._v("New Comment")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-6" }, [
+                    _c("label", { attrs: { for: "name" } }, [_vm._v("Name")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.name,
+                          expression: "name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", name: "name", id: "name" },
+                      domProps: { value: _vm.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.name = $event.target.value
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-6" }, [
+                    _c("label", { attrs: { for: "email" } }, [_vm._v("Email")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.email,
+                          expression: "email"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "email", name: "email", id: "email" },
+                      domProps: { value: _vm.email },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.email = $event.target.value
+                        }
+                      }
+                    })
+                  ])
+                ])
               ]),
               _vm._v(" "),
               _c("textarea", {
