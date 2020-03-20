@@ -32,7 +32,14 @@ Vue.component(
     "app-post-cards-list",
     require("./components/posts/post_cards_list.vue").default
 );
-
+Vue.component(
+    "app-comments",
+    require("./components/comments/comments.vue").default
+);
+Vue.component(
+    "app-loading",
+    require("./components/partials/loading.vue").default
+);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

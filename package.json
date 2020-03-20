@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "laravel-vue-pagination": "^2.3.1",
+        "vue-avatar": "^2.2.0",
         "vuejs-noty": "^0.1.3"
     }
 }

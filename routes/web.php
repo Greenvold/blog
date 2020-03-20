@@ -24,3 +24,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/blog', 'BlogController@index')->name('blog.index');
 Route::resource('post', 'PostController');
 Route::get('/dashboard', 'UserController@dashboard')->name('user.dashboard');
+Route::get('/comments/{post}', 'CommentController@fetch');
