@@ -2226,6 +2226,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     _post: {
@@ -2250,7 +2261,7 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {
       var _this = this;
 
-      if (!this.post.title || !this.post.desc || !this.post.body) {
+      if (!this.post.title || !this.post.desc || !this.post.body || !this.post.published) {
         this.$noty.warning("Please fill in all fields before submitting. Thank you.");
         return;
       }
@@ -2260,6 +2271,7 @@ __webpack_require__.r(__webpack_exports__);
       formData.append("title", this.post.title);
       formData.append("desc", this.post.desc);
       formData.append("body", this.post.body);
+      formData.append("published", this.post.published);
 
       if (this.edit) {
         formData.append("_method", "PUT");
@@ -39371,6 +39383,50 @@ var render = function() {
             _vm._v(
               "Main content of your new post. This content will be shown\n                upon opening the blog post."
             )
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.post.published,
+                expression: "post.published"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { name: "published", id: "published" },
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.$set(
+                  _vm.post,
+                  "published",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
+              }
+            }
+          },
+          [
+            _c("option", { attrs: { value: "not" } }, [
+              _vm._v("Not published")
+            ]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "published" } }, [
+              _vm._v("Published")
+            ])
           ]
         )
       ]),

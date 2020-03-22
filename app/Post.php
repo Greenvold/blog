@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $fillable = ['title', 'desc', 'body', 'user_id'];
+    protected $fillable = ['title', 'desc', 'body', 'user_id', 'published'];
 
     protected $with = ['author'];
 
@@ -19,5 +19,10 @@ class Post extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function scopePublished($query)
+    {
+        return Post::where('published', 'published')->orderBy('created_at', 'desc');
     }
 }

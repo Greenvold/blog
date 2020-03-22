@@ -10,8 +10,8 @@ class PostController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->only('create');
-        $this->middleware(['auth', 'author'])->except(['index', 'show', 'create']);
+        $this->middleware('auth')->only('create', 'store');
+        $this->middleware(['auth', 'author'])->only(['edit', 'update', 'destroy']);
     }
     /**
      * Display a listing of the resource.
@@ -20,7 +20,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Post::paginate(8);
+        return Post::published()->paginate(8);
     }
 
     /**
@@ -45,6 +45,7 @@ class PostController extends Controller
             'title' => $request->title,
             'desc' => $request->desc,
             'body' => $request->body,
+            'published' => $request->published,
             'user_id' => auth()->user()->id,
         ]);
 
