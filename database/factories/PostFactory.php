@@ -11,6 +11,7 @@ $factory->define(Post::class, function (Faker $faker) {
         'title' => $faker->sentence(),
         'desc' => $faker->sentence(20),
         'body' => $faker->text(800),
+        'published' => 'published',
         'user_id' => function () {
             return factory(User::class)->create()->id;
         },

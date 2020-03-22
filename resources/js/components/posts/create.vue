@@ -40,6 +40,17 @@
                 >
             </div>
             <div class="form-group">
+                <select
+                    name="published"
+                    id="published"
+                    class="form-control"
+                    v-model="post.published"
+                >
+                    <option value="not">Not published</option>
+                    <option value="published">Published</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-primary" @click="submit" v-if="!loading">
                     Submit
                 </button>
@@ -74,7 +85,12 @@ export default {
     },
     methods: {
         submit() {
-            if (!this.post.title || !this.post.desc || !this.post.body) {
+            if (
+                !this.post.title ||
+                !this.post.desc ||
+                !this.post.body ||
+                !this.post.published
+            ) {
                 this.$noty.warning(
                     "Please fill in all fields before submitting. Thank you."
                 );
@@ -85,6 +101,7 @@ export default {
             formData.append("title", this.post.title);
             formData.append("desc", this.post.desc);
             formData.append("body", this.post.body);
+            formData.append("published", this.post.published);
             if (this.edit) {
                 formData.append("_method", "PUT");
             }
