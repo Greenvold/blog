@@ -99,7 +99,7 @@
                 <a href="https://vapor.laravel.com">Vapor</a>
                 <a href="https://github.com/laravel/laravel">GitHub</a>
             </div>
-            Welcome
+            Welcome, fixed bug
         </div>
     </div>
 </body>
